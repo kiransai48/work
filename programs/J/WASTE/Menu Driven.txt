@@ -1,0 +1,385 @@
+import java.util.Scanner;
+
+public class Main {
+    
+	public static void main(String args[])
+	{
+		
+		Scanner sc= new Scanner(System.in);//Initializing Scanner
+		Student s=new Student();//Creating object for Student class
+		StudentBO sb=new StudentBO();//Creating object for StudentBO
+		System.out.println("MENU\n1.Insert\n2.Update\n3.Delete\n4.Display\n5.Exit");
+		System.out.println("Enter your choice :");
+		int sel=Integer.parseInt(sc.nextLine());
+		do
+		{
+			
+			if(sel==1)
+			{
+				System.out.println("Enter the Roll Number :");//Getting inputs from user
+				int rollNo= Integer.parseInt(sc.nextLine());
+				System.out.println("Enter the Name :");
+				String name=sc.nextLine();
+				System.out.println("Enter the Age :");
+				int age=Integer.parseInt(sc.nextLine());
+				System.out.println("Enter the Total marks :");
+				int marks=Integer.parseInt(sc.nextLine());
+				System.out.println("Enter the Department :");
+				String dept=sc.nextLine();
+				
+				s.setRollNo(rollNo);//setting data
+				s.setName(name);
+				s.setAge(age);
+				s.setMarks(marks);
+				s.setDept(dept);
+				
+				sb.insert(s);//Calling insert method in StudentBO
+				
+			}
+			else if(sel==2)
+			{
+				System.out.println("Enter the Roll Number of the student to be updated :");//Get a roll number to be updated
+				String rollNo= sc.nextLine();
+                //System.out.println("aaaaaaaaaaaaa"+sb.rollNocheck(rollNo));
+			    if(rollNo.length()!=3)
+				{
+					System.out.println("No Record Found");
+				}
+				else
+				{
+				System.out.println("Do you want to update :\r\n1.Name\r\n2.Age\r\n3.Total Marks\r\n4.Department\r\n5.Exit");
+				System.out.println("Enter Your choice :");
+                int choice=Integer.parseInt(sc.nextLine());//get user choice of update
+				if(choice==1)
+				{
+					System.out.println("Enter the Name :");
+					String name=sc.nextLine();//get name
+					s.setRollNo(Integer.parseInt(rollNo));//set data
+					s.setName(name);
+					sb.update(s, choice);//call method to update
+				}
+				else if(choice==2)
+				{
+					System.out.println("Enter the Age :");
+					int age=Integer.parseInt(sc.nextLine());
+				    s.setRollNo(Integer.parseInt(rollNo));
+					s.setAge(age);
+					sb.update(s, choice);
+				}
+				else if(choice==3)
+				{
+					System.out.println("Enter the Total marks :");
+					int marks=Integer.parseInt(sc.nextLine());
+				    s.setRollNo(Integer.parseInt(rollNo));
+					s.setMarks(marks);
+					sb.update(s, choice);
+				}
+				else if(choice==4)
+				{
+					System.out.println("Enter the Department :");
+					String dept=sc.nextLine();
+					s.setRollNo(Integer.parseInt(rollNo));
+					s.setDept(dept);
+					sb.update(s, choice);
+				}
+				else
+				{
+					System.exit(0);
+				}
+				}
+			}
+			else if(sel==3)
+			{
+				System.out.println("Enter the Roll Number of the student to be deleted :");
+				String rollNo=sc.nextLine();//get a roll number to update
+				if(rollNo.length()!=3)
+				{
+					System.out.println("No Record Found");
+				}
+				else
+				{
+				s.setRollNo(Integer.parseInt(rollNo));
+				sb.delete(s);
+			}
+			}
+			else if(sel==4)
+			{
+				StudentDAO sd= new StudentDAO();//Create object for StudentDAO class to display
+				sd.display();
+			}
+			else
+			{
+				System.exit(0);//else exit from program
+			}
+			System.out.println("MENU\n1.Insert\n2.Update\n3.Delete\n4.Display\n5.Exit");
+			System.out.println("Enter your choice :");
+		    sel=Integer.parseInt(sc.nextLine());
+		}while(sel>0 && sel<6);
+		
+		
+	}
+
+}
+=====================
+
+public class Student {
+    
+	private int rollNo;//Declaring variables
+	private String name;
+	private int age;
+	private int marks;
+	private String dept;
+	public int getRollNo() {//Arranging getters ad setters
+		return rollNo;
+	}
+	public void setRollNo(int rollNo) {
+		this.rollNo = rollNo;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	public int getMarks() {
+		return marks;
+	}
+	public void setMarks(int marks) {
+		this.marks = marks;
+	}
+	public String getDept() {
+		return dept;
+	}
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+	
+	
+	
+
+}
+========================
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+
+public class StudentBO {
+
+    void insert(Student s)
+	{
+	try {
+		Class.forName("com.mysql.jdbc.Driver");//load class
+		ResourceBundle rb = ResourceBundle.getBundle("mysql");//create object for resource bundle
+		String url = rb.getString("db.url");//set url
+		String username = rb.getString("db.username");//set username
+		String password = rb.getString("db.password");//set password
+		Connection con = DriverManager.getConnection(url,username,password);//Establish connection
+		//insert details into database
+		PreparedStatement ps = con.prepareStatement("INSERT INTO student VALUES(?,?,?,?,?)");
+		ps.setInt(1,s.getRollNo());//set data into required fields
+		ps.setString(2, s.getName());
+		ps.setInt(3, s.getAge());
+		ps.setInt(4, s.getMarks());
+		ps.setString(5, s.getDept());
+		            
+		int r =ps.executeUpdate();//execute update
+		if(r>0){//if executed,
+			System.out.println("Record Inserted");
+		      }
+	}
+	catch(ClassNotFoundException e)
+    {
+		 System.out.println(e);
+    } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
+    }
+	
+	void update(Student s,int ch)
+	{
+		try
+		{
+		Class.forName("com.mysql.jdbc.Driver");//load class
+		ResourceBundle rb = ResourceBundle.getBundle("mysql");//create object for resource bundle
+		String url = rb.getString("db.url");//set url
+		String username = rb.getString("db.username");//set username
+		String password = rb.getString("db.password");//set password
+		Connection con = DriverManager.getConnection(url,username,password);//Establish connection
+		// details into database
+		int rs=0;
+		if(ch==1)
+		{
+			PreparedStatement ps = con.prepareStatement("UPDATE student SET Name=? WHERE RollNo=?");
+			ps.setString(1,s.getName());
+			ps.setInt(2,s.getRollNo());
+			
+			rs=ps.executeUpdate();
+		}
+		else if(ch==2)
+		{
+			PreparedStatement ps = con.prepareStatement("UPDATE student SET Age=? WHERE RollNo=?");
+			ps.setInt(1,s.getAge());
+			ps.setInt(2,s.getRollNo());
+			
+			rs=ps.executeUpdate();
+		}
+		else if(ch==3)
+		{
+			PreparedStatement ps = con.prepareStatement("UPDATE student SET Mark=? WHERE RollNo=?");
+			ps.setInt(1,s.getMarks());
+			ps.setInt(2,s.getRollNo());
+			
+			rs=ps.executeUpdate();
+		}
+		else
+		{
+			PreparedStatement ps = con.prepareStatement("UPDATE student SET Department=? WHERE RollNo=?");
+			ps.setString(1,s.getDept());
+			ps.setInt(2,s.getRollNo());
+			
+			rs=ps.executeUpdate();
+		}
+		
+		if(rs>0)
+		{
+			System.out.println("Record Updated Successfully");
+		}
+		else
+		{
+			System.out.println("No Record Found");
+		}
+		}
+		catch(ClassNotFoundException e)
+	    {
+			 System.out.println(e);
+	    } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	void delete(Student s)
+	{
+		try
+		{
+		Class.forName("com.mysql.jdbc.Driver");//load class
+		ResourceBundle rb = ResourceBundle.getBundle("mysql");//create object for resource bundle
+		String url = rb.getString("db.url");//set url
+		String username = rb.getString("db.username");//set username
+		String password = rb.getString("db.password");//set password
+		Connection con = DriverManager.getConnection(url,username,password);//Establish connection
+		// details into database
+		PreparedStatement ps = con.prepareStatement("DELETE FROM student WHERE RollNo=?");
+		ps.setInt(1,s.getRollNo());
+		
+		int rs=ps.executeUpdate();
+		
+		if(rs>0)
+		{
+			System.out.println("Record Deleted Successfully");
+		}
+		else
+		{
+			System.out.println("No Record Found");
+		}
+		}
+		catch(ClassNotFoundException e)
+	    {
+			 System.out.println(e);
+	    } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	String rollNocheck(int r)
+	{
+		String b = null;
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver");//load class
+			ResourceBundle rb = ResourceBundle.getBundle("mysql");//create object for resource bundle
+			String url = rb.getString("db.url");//set url
+			String username = rb.getString("db.username");//set username
+			String password = rb.getString("db.password");//set password
+			Connection con = DriverManager.getConnection(url,username,password);//Establish connection
+			// details into database
+			//boolean b;
+			//int i=0;
+            //System.out.println("dddddddddddd"+r);
+			 PreparedStatement ps = con.prepareStatement("SELECT * FROM student WHERE RollNo=?");
+			 //select required fields from table
+			 ps.setInt(1, r);
+			 ResultSet rs=ps.executeQuery();//excute query
+			 if(rs.next())
+			 {
+                //System.out.println("xxxxxxxxxx");
+				 b="select";
+			 }
+		}
+	catch(ClassNotFoundException e)
+    {
+		 System.out.println(e);
+    } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+		return b;
+	}
+}
+===============
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+
+public class StudentDAO {
+
+    void display()
+	{
+		
+	try
+	{
+		Class.forName("com.mysql.jdbc.Driver");//load class
+		ResourceBundle rb = ResourceBundle.getBundle("mysql");//create object for resource bundle
+		String url = rb.getString("db.url");//set url
+		String username = rb.getString("db.username");//set username
+		String password = rb.getString("db.password");//set password
+		Connection con = DriverManager.getConnection(url,username,password);//Establish connection
+		 PreparedStatement ps = con.prepareStatement("SELECT * FROM student");
+		 //select required fields from table
+		 ResultSet rs=ps.executeQuery();//excute query
+		 while(rs.next())//if resultset has data
+		 {
+		 System.out.println("Roll No :00"+rs.getInt("rollNo"));
+		 System.out.println("Name :"+rs.getString("Name"));
+		 System.out.println("Age :"+rs.getInt("Age"));
+		 System.out.println("Total marks :"+rs.getInt("Mark"));
+		 System.out.println("Department :"+rs.getString("Department"));
+		 System.out.println();
+		 }
+
+	}
+	catch(ClassNotFoundException e)
+	{
+		System.out.println(e);
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+}
+}
+ 

@@ -1,0 +1,82 @@
+DDL (Additional query)
+
+
+create table vehicle
+--------------------
+create table vehicle(vehicleID varchar(4) primary key,
+
+                     register_number varchar(15) not null,
+
+                     vehicle_categoryID varchar(4) not null,
+
+                     current_mileage Int(11) not null,
+
+                     foreign key(model_id) references vehicle_category(categoryID),
+
+                     foreign key(vehicle_categoryID) references vehicle_category(categoryID));
+
+
+
+
+create table booking
+-------------------
+
+create table booking(bookingID varchar(4) primary key,
+02
+                     date_from DATE not null,
+03
+                     date_to DATE not null,
+04
+                     confirmation_letter_status char(1) not null,
+05
+                     payment_received_status char(1) not null,
+06
+                     booking_statusID varchar(4) not null,
+07
+                     customer_id varchar(4) not null,
+08
+                     vehicle_id varchar(4) not null,
+09
+                     foreign key(booking_statusID) references booking_status(statusID),
+
+10
+                     foreign key(customer_id) references customer(customerID),
+11
+                     foreign key(vehicle_id) references vehicle(vehicleID));
+
+
+
+ Change table name model to vehicle_model
+-----------------------------------------
+rename table model to vechicle_model;
+
+
+Add new column to vehicle_model table
+-------------------------------------
+alter table vehicle_model  add column colour varchar(20);
+
+
+Change column name to vehiclecolour
+-------------------------------------
+
+alter table vehicle_model change colour vehiclecolour varchar(20);
+
+
+Add constraint to customer table
+-------------------------------
+alter table customer add constraint uc_phone_number unique(phone_number);
+
+
+Remove column from vehicle_model
+--------------------------------
+alter table vehicle_model drop column vehiclecolour;
+
+
+Add constraint to booking table
+-------------------------------
+alter table booking add constraint check_ispaymentreceived check(payment_receive_status = 'Y' or payment_received_status='N');
+
+
+
+
+

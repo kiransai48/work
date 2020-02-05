@@ -1,0 +1,156 @@
+MAIN
+import java.util.Scanner;
+
+public class Main {
+    
+    public static void main(String args[])
+	{
+		Scanner sc= new Scanner(System.in);//Initializing Scanner
+		System.out.println("Updating The PhoneNumber of the Contact\r\nEnter The FirstName of the Contact to update his PhoneNumber");
+		String firstName = sc.nextLine();
+		
+		 System.out.println("Before the update");
+         System.out.format("%-15s %-15s %-30s %-15s\n",
+        "FirstName","LastName","Email","PhoneNumber");
+         ContactDAO cd= new ContactDAO();
+         cd.display();
+		
+		System.out.println("Enter The PhoneNumber of the Contact");
+		long phoneNumber = sc.nextLong();
+		
+		Contact c=new Contact();//Creating object for Contact class
+		
+		c.setFirstName(firstName);//Set variables for contact class
+		c.setPhone(phoneNumber);
+		ContactBO cb= new ContactBO();//Create object for contact class
+		cb.Database(c);//call method database to insert details
+	}
+
+}
+===================
+cONTACT
+
+public class Contact {
+
+    
+    private long id;           //Initializing variables
+	private String firstName;
+	private String lastName;
+	private String email;
+	private long phone;
+	
+	public long getId() {    //Arranging getters and setters
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public long getPhone() {
+		return phone;
+	}
+	public void setPhone(long phone) {
+		this.phone = phone;
+	}
+}
+
+
+=================
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+
+public class ContactDAO {
+
+    void display()
+    {
+		
+	try
+	{
+		Class.forName("com.mysql.jdbc.Driver");//load class
+		ResourceBundle rb = ResourceBundle.getBundle("mysql");//create object for resource bundle
+		String url = rb.getString("db.url");//set url
+		String username = rb.getString("db.username");//set username
+		String password = rb.getString("db.password");//set password
+		Connection con = DriverManager.getConnection(url,username,password);//Establish connection
+		 PreparedStatement ps = con.prepareStatement("SELECT firstName,lastName,email,phoneNo FROM contact");
+		 //select required fields from table
+		 ResultSet rs=ps.executeQuery();//excute query
+		 if(rs.next())//if resultset has data
+		 {
+		 System.out.format("%-15s %-15s %-30s %-15s\n",//print data
+		 rs.getString("firstName"),rs.getString("lastName"),rs.getString("email"),rs.getString("phoneNo"));
+		 }
+
+	}
+	catch(ClassNotFoundException e)
+	{
+		System.out.println(e);
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+}
+}
+======================
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+
+public class ContactBO {
+
+    void Database(Contact c)
+    {
+	try {
+		Class.forName("com.mysql.jdbc.Driver");//load class
+		ResourceBundle rb = ResourceBundle.getBundle("mysql");//create object for resource bundle
+		String url = rb.getString("db.url");//set url
+		String username = rb.getString("db.username");//set username
+		String password = rb.getString("db.password");//set password
+		Connection con = DriverManager.getConnection(url,username,password);//Establish connection
+		//update details into database
+		PreparedStatement ps = con.prepareStatement("UPDATE contact set phoneNo=? WHERE firstName=?");
+		ps.setString(2, c.getFirstName());//set data into required fields
+		ps.setString(1, c.getPhone()+"");
+		            
+		int r =ps.executeUpdate();//execute update
+		if(r>0){//if executed,
+			System.out.println("After the update");
+			System.out.format("%-15s %-15s %-30s %-15s\n","FirstName","LastName","Email","PhoneNumber");
+			ContactDAO cd= new ContactDAO();//create object for ContactDAO class
+			cd.display();//call display method
+		     
+		 }
+	}
+	catch(ClassNotFoundException e)
+    {
+		 System.out.println(e);
+    } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
+}
+}

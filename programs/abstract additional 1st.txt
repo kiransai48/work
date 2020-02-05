@@ -1,0 +1,322 @@
+ODI
+-------------
+public class ODI extends Match{   //ODI Method extends match
+    private int currentScore;          //private variables
+ private float currentOver;
+ private int target;
+ 
+ public ODI(int currentScore, float currentOver, int target) {//Parameterized constructor
+  super();
+  this.currentScore = currentScore;
+  this.currentOver = currentOver;
+  this.target = target;
+ }
+ 
+ public ODI() {//Default constructor
+  super();
+ }
+   public int getCurrentScore() {      //Getters and setters for variables
+  return currentScore;
+ }
+ public void setCurrentScore(int currentScore) {
+  this.currentScore = currentScore;
+ }
+ 
+ public float getCurrentOver() {
+  return currentOver;
+ }
+ public void setCurrentOver(float currentOver) {
+  this.currentOver = currentOver;
+ }
+   public int getTarget() {
+  return target;
+ }
+ public void setTarget(int target) {
+  this.target = target;
+ }
+
+ @Override
+  public float calculateRunRate() {      //Abstract method runrate to calculate runrate
+   float rr=(target-currentScore)/(50-currentOver);
+   //System.out.println(target-currentScore);
+   //System.out.println(50-currentOver);
+   return (float) (Math.round(rr));
+  }
+  @Override
+  public int calculateBalls() {   //Abstract method calculateBalls to calculate remaining number of balls
+   int oversCom=(int)currentOver;    //Seperating decimal part
+   //System.out.println(oversCom);
+   int ballsComp=(int) ((currentOver*10)-(oversCom*10));
+   int balls=(((50-oversCom)*6)-ballsComp);
+   return balls;
+  }
+ 
+  public void display()  {//Display method
+   if(calculateBalls()>1)
+    {
+    if((target-currentScore)>1)
+    {
+      System.out.println("Need "+(target-currentScore)+" Runs in "+calculateBalls()+" balls");
+      System.out.print("Require Run Rate - ");
+      System.out.printf("%.2f",calculateRunRate());
+    }
+    else
+    {
+      System.out.println("Need "+(target-currentScore)+" Run in "+calculateBalls()+" balls");
+      System.out.print("Require Run Rate - ");
+      System.out.printf("%.2f",calculateRunRate());
+      }
+    }
+    else
+    {
+     if((target-currentScore)>1)
+     {
+       System.out.println("Need "+(target-currentScore)+" Runs in "+calculateBalls()+" ball");
+       System.out.print("Require Run Rate - ");
+       System.out.printf("%.2f",calculateRunRate());
+     }
+     else
+     {
+       System.out.println("Need "+(target-currentScore)+" Run in "+calculateBalls()+" ball");
+          System.out.println("Require Run Rate - 6.00");
+       }
+    }
+  }
+}
+==================================================
+T20
+-------
+public class T20 extends Match{//Test Method extends match
+    private int currentScore;//private variables
+ private float currentOver;
+ private int target;
+ public T20() {//Default constructor
+  super();
+ }
+ 
+ public T20(int currentScore, float currentOver, int target) {//Parameterized constructor
+  super();
+  this.currentScore = currentScore;
+  this.currentOver = currentOver;
+  this.target = target;
+ }
+    public int getCurrentScore() {  //Getters and setters
+  return currentScore;
+ }
+ public void setCurrentScore(int currentScore) {
+  this.currentScore = currentScore;
+ }
+ public float getCurrentOver() {
+  return currentOver;
+ }
+ public void setCurrentOver(float currentOver) {
+  this.currentOver = currentOver;
+ }
+ public int getTarget() {
+  return target;
+ }
+ public void setTarget(int target) {
+  this.target = target;
+ }
+ @Override
+  public float calculateRunRate() {
+   float rr=(target-currentScore)/(90-currentOver);
+   //System.out.println(target-currentScore);
+   //System.out.println(90-currentOver);
+   return (float) Math.round(rr);
+  }
+  @Override
+  public int calculateBalls() {//Abstract method calculateBalls to calculate remaining number of balls
+   int oversCom=(int)currentOver;//Seperating decimal part
+   //System.out.println(oversCom);
+   int ballsComp=(int) ((currentOver*10)-(oversCom*10));
+   int balls=(((20-oversCom)*6)-ballsComp);
+   return balls;
+  }
+ 
+  public void display()  {//Display method
+   if(calculateBalls()>1)
+    {
+    if((target-currentScore)>1)
+    {
+      System.out.println("Need "+(target-currentScore)+" Runs in "+calculateBalls()+" balls");
+      System.out.print("Require Run Rate - ");
+      System.out.printf("%.2f",calculateRunRate());
+    }
+    else
+    {
+      System.out.println("Need "+(target-currentScore)+" Run in "+calculateBalls()+" balls");
+      System.out.print("Require Run Rate - ");
+      System.out.printf("%.2f",calculateRunRate());
+      }
+    }
+    else
+    {
+     if((target-currentScore)>1)
+     {
+       System.out.println("Need "+(target-currentScore)+" Runs in "+calculateBalls()+" ball");
+       System.out.print("Require Run Rate - ");
+       System.out.printf("%.2f",calculateRunRate());
+     }
+     else
+     {
+       System.out.println("Need "+(target-currentScore)+" Run in "+calculateBalls()+" ball");
+          System.out.println("Require Run Rate - 6.00");
+       }
+    }
+  }
+}
+=======================================================
+Test
+-----------
+public class Test extends Match{//Test Method extends match
+    private int currentScore;//private variables
+ private float currentOver;
+ private int target;
+ public Test() {//Default constructor
+  super();
+ }
+ 
+ public Test(int currentScore, float currentOver, int target) {//Parameterized constructor
+  super();
+  this.currentScore = currentScore;
+  this.currentOver = currentOver;
+  this.target = target;
+ }
+    public int getCurrentScore() {  //Getters and setters
+  return currentScore;
+ }
+ public void setCurrentScore(int currentScore) {
+  this.currentScore = currentScore;
+ }
+ public float getCurrentOver() {
+  return currentOver;
+ }
+ public void setCurrentOver(float currentOver) {
+  this.currentOver = currentOver;
+ }
+ public int getTarget() {
+  return target;
+ }
+ public void setTarget(int target) {
+  this.target = target;
+ }
+ @Override
+  public float calculateRunRate() {
+   float rr=(target-currentScore)/(90-currentOver);
+   //System.out.println(target-currentScore);
+   //System.out.println(90-currentOver);
+   return (float) Math.round(rr);
+  }
+  @Override
+  public int calculateBalls() {//Abstract method calculateBalls to calculate remaining number of balls
+   int oversCom=(int)currentOver;//Seperating decimal part
+   //System.out.println(oversCom);
+   int ballsComp=(int) ((currentOver*10)-(oversCom*10));
+   int balls=(((90-oversCom)*6)-ballsComp);
+   return balls;
+  }
+ 
+  public void display()  {//Display method
+   if(calculateBalls()>1)
+    {
+    if((target-currentScore)>1)
+    {
+      System.out.println("Need "+(target-currentScore)+" Runs in "+calculateBalls()+" balls");
+      System.out.print("Require Run Rate - ");
+      System.out.printf("%.2f",calculateRunRate());
+    }
+    else
+    {
+      System.out.println("Need "+(target-currentScore)+" Run in "+calculateBalls()+" balls");
+      System.out.print("Require Run Rate - ");
+      System.out.printf("%.2f",calculateRunRate());
+      }
+    }
+    else
+    {
+     if((target-currentScore)>1)
+     {
+       System.out.println("Need "+(target-currentScore)+" Runs in "+calculateBalls()+" ball");
+       System.out.print("Require Run Rate - ");
+       System.out.printf("%.2f",calculateRunRate());
+     }
+     else
+     {
+       System.out.println("Need "+(target-currentScore)+" Run in "+calculateBalls()+" ball");
+          System.out.println("Require Run Rate - 6.00");
+       }
+    }
+  }
+}
+=========================================================
+Match
+------------
+abstract class Match {
+   
+ private int currentScore;
+ private float currentOver;
+ private int target;
+ 
+ void display()
+ {
+  
+ }
+ abstract float calculateRunRate();
+ abstract int calculateBalls(); 
+}
+----------------------------------------------
+Main
+--------------
+import java.util.Scanner;
+public class Main{
+    public static void main(String[] args) {
+  
+  Scanner sc= new Scanner(System.in);
+  System.out.println("Enter the Cricket Format\r\n1.ODI\r\n2.T20\r\n3.Test");
+  int n= Integer.parseInt(sc.nextLine());
+  if(n==1)
+  {
+   System.out.println("Enter the Current Score");
+   int score= Integer.parseInt(sc.nextLine());
+   System.out.println("Enter the Current over");
+   float currentOver= Float.parseFloat(sc.nextLine());
+   System.out.println("Enter the Target");
+   int target= Integer.parseInt(sc.nextLine());
+   Match odi= new ODI(score, currentOver, target);
+   System.out.println("Requirements:");
+   odi.display();
+  }
+  else if(n==2)
+  {
+   System.out.println("Enter the Current Score");
+   int score= Integer.parseInt(sc.nextLine());
+   System.out.println("Enter the Current over");
+   float currentOver= Float.parseFloat(sc.nextLine());
+   System.out.println("Enter the Target");
+   int target= Integer.parseInt(sc.nextLine());
+   Match t20= new T20(score, currentOver, target);
+   
+   System.out.println("Requirements:");
+   t20.display();
+  }
+  else if(n==3)
+  {
+   System.out.println("Enter the Current Score");
+   int score= Integer.parseInt(sc.nextLine());
+   System.out.println("Enter the Current over");
+   float currentOver= Float.parseFloat(sc.nextLine());
+   System.out.println("Enter the Target");
+   int target= Integer.parseInt(sc.nextLine());
+   Match test= new Test(score, currentOver, target);
+   System.out.println("Requirements:");
+   test.display();
+  }
+  else
+  {
+   System.out.println("Invalid Format type");
+  }
+ }
+}
+==============================================================
+
